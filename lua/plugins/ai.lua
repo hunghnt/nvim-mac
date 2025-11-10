@@ -17,7 +17,7 @@ return {
 					dismiss = "<C-]>",
 				},
 			},
-			copilot_model = "gpt-4o-copilot",
+			-- copilot_model = "gpt-4o-copilot",
 		})
 	end,
 }

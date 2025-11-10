@@ -36,5 +36,6 @@ require("lazy").setup({
 	require("plugins.debug"),
 	require("plugins.lspsaga"),
 	require("plugins.gitblame"),
+	require("plugins.ai"),
 	{ "akinsho/git-conflict.nvim", version = "*", config = true },
 })
