@@ -24,7 +24,7 @@ vim.api.nvim_set_hl(0, "@string.go", { fg = "#faf16e" }) -- orange for strings
 vim.api.nvim_set_hl(0, "@number.go", { fg = "#B5CEA8" }) -- green for numbers
 vim.api.nvim_set_hl(0, "@boolean.go", { fg = "#B5CEA8" }) -- green for true/false/nil
 vim.api.nvim_set_hl(0, "@type.go", { fg = "#91fc7e" })
-
+vim.api.nvim_set_hl(0, "@property.go", { fg = "#fcb6ee" })
 -- Setup
 require("lazy").setup({
 	require("plugins.misc"),
