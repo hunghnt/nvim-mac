@@ -17,12 +17,12 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 
 vim.opt.rtp:prepend(lazypath)
-vim.api.nvim_set_hl(0, "@keyword.return.go", { fg = "#ff3333" }) -- purple for return
-vim.api.nvim_set_hl(0, "@constant.go", { fg = "#4EC9B0" }) -- green for values/constants
-vim.api.nvim_set_hl(0, "@variable.go", { fg = "#faf5f5" }) -- light blue for variables
-vim.api.nvim_set_hl(0, "@string.go", { fg = "#faf16e" }) -- orange for strings
-vim.api.nvim_set_hl(0, "@number.go", { fg = "#B5CEA8" }) -- green for numbers
-vim.api.nvim_set_hl(0, "@boolean.go", { fg = "#B5CEA8" }) -- green for true/false/nil
+vim.api.nvim_set_hl(0, "@keyword.return.go", { fg = "#ff3333" })
+vim.api.nvim_set_hl(0, "@constant.go", { fg = "#4EC9B0" })
+vim.api.nvim_set_hl(0, "@variable.go", { fg = "#faf5f5" })
+vim.api.nvim_set_hl(0, "@string.go", { fg = "#faf16e" })
+vim.api.nvim_set_hl(0, "@number.go", { fg = "#B5CEA8" })
+vim.api.nvim_set_hl(0, "@boolean.go", { fg = "#B5CEA8" })
 vim.api.nvim_set_hl(0, "@type.go", { fg = "#91fc7e" })
 vim.api.nvim_set_hl(0, "@property.go", { fg = "#fcb6ee" })
 -- Setup

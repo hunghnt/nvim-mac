@@ -14,12 +14,14 @@ return {
 			ensure_installed = {
 				"prettier", -- ts/js formatter
 				"stylua", -- lua formatter
+				"golangci-lint", -- go linter
 			},
 			automatic_installation = true,
 		})
 
 		local sources = {
 			diagnostics.checkmake,
+			diagnostics.golangci_lint,
 			formatting.prettier.with({ filetypes = { "html", "json", "yaml", "markdown" } }),
 			formatting.stylua,
 			formatting.shfmt.with({ args = { "-i", "4" } }),
