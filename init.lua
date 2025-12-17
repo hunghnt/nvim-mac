@@ -17,14 +17,6 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 
 vim.opt.rtp:prepend(lazypath)
-vim.api.nvim_set_hl(0, "@keyword.return.go", { fg = "#ff3333" })
-vim.api.nvim_set_hl(0, "@constant.go", { fg = "#4EC9B0" })
-vim.api.nvim_set_hl(0, "@variable.go", { fg = "#faf5f5" })
-vim.api.nvim_set_hl(0, "@string.go", { fg = "#faf16e" })
-vim.api.nvim_set_hl(0, "@number.go", { fg = "#B5CEA8" })
-vim.api.nvim_set_hl(0, "@boolean.go", { fg = "#B5CEA8" })
-vim.api.nvim_set_hl(0, "@type.go", { fg = "#91fc7e" })
-vim.api.nvim_set_hl(0, "@property.go", { fg = "#fcb6ee" })
 -- Setup
 require("lazy").setup({
 	require("plugins.misc"),
@@ -44,5 +36,19 @@ require("lazy").setup({
 	require("plugins.lspsaga"),
 	require("plugins.gitblame"),
 	require("plugins.ai"),
+	-- require("plugins.minimap"),
 	{ "akinsho/git-conflict.nvim", version = "*", config = true },
 })
+
+-- Lua
+
+vim.cmd("colorscheme poimandres")
+
+vim.api.nvim_set_hl(0, "@keyword.return.go", { fg = "#ff3333" })
+-- vim.api.nvim_set_hl(0, "@constant.go", { fg = "#4EC9B0" })
+-- vim.api.nvim_set_hl(0, "@variable.go", { fg = "#faf5f5" })
+-- vim.api.nvim_set_hl(0, "@string.go", { fg = "#faf16e" })
+-- vim.api.nvim_set_hl(0, "@number.go", { fg = "#B5CEA8" })
+-- vim.api.nvim_set_hl(0, "@boolean.go", { fg = "#B5CEA8" })
+-- vim.api.nvim_set_hl(0, "@type.go", { fg = "#91fc7e" })
+-- vim.api.nvim_set_hl(0, "@property.go", { fg = "#fcb6ee" })

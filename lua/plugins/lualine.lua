@@ -28,6 +28,9 @@ return {
 			update_in_insert = false,
 			always_visible = false,
 			cond = hide_in_width,
+			fmt = function(str)
+				return "[ " .. str .. " ]" -- Add brackets around the diagnostics
+			end,
 		}
 
 		local diff = {
@@ -35,6 +38,29 @@ return {
 			colored = false,
 			symbols = { added = " ", modified = " ", removed = " " }, -- changes diff symbols
 			cond = hide_in_width,
+		}
+
+		local custom_theme = {
+			normal = {
+				a = { fg = "#000000", bg = "#61afef", gui = "bold" },
+				b = { fg = "#bbc2cf", bg = "#3e4452" },
+				c = { fg = "#bbc2cf", bg = "#282c34" },
+			},
+			insert = {
+				a = { fg = "#000000", bg = "#f74545", gui = "bold" },
+				b = { fg = "#bbc2cf", bg = "#3e4452" },
+				c = { fg = "#bbc2cf", bg = "#282c34" },
+			},
+			visual = {
+				a = { fg = "#000000", bg = "#c678dd", gui = "bold" },
+				b = { fg = "#bbc2cf", bg = "#3e4452" },
+				c = { fg = "#bbc2cf", bg = "#282c34" },
+			},
+			command = {
+				a = { fg = "#000000", bg = "#e5c07b", gui = "bold" },
+				b = { fg = "#bbc2cf", bg = "#3e4452" },
+				c = { fg = "#bbc2cf", bg = "#282c34" },
+			},
 		}
 
 		require("lualine").setup({
@@ -47,6 +73,7 @@ return {
 				component_separators = { left = "", right = "" },
 				disabled_filetypes = { "alpha", "neo-tree" },
 				always_divide_middle = true,
+				theme = custom_theme,
 			},
 			sections = {
 				lualine_a = { mode },
