@@ -36,6 +36,7 @@ require("lazy").setup({
 	require("plugins.lspsaga"),
 	require("plugins.gitblame"),
 	require("plugins.ai"),
+	require("plugins.vim-visual-multi"),
 	-- require("plugins.minimap"),
 	{ "akinsho/git-conflict.nvim", version = "*", config = true },
 })
@@ -52,3 +53,21 @@ vim.api.nvim_set_hl(0, "@keyword.return.go", { fg = "#ff3333" })
 -- vim.api.nvim_set_hl(0, "@boolean.go", { fg = "#B5CEA8" })
 -- vim.api.nvim_set_hl(0, "@type.go", { fg = "#91fc7e" })
 -- vim.api.nvim_set_hl(0, "@property.go", { fg = "#fcb6ee" })
+--
+--
+vim.api.nvim_set_hl(0, "@function", { fg = "#00ff00" })
+
+-- Function names when they're called
+vim.api.nvim_set_hl(0, "@function.call", { fg = "#00ff00" })
+
+-- -- Built-in functions (like make, len, append)
+-- vim.api.nvim_set_hl(0, "@function.builtin", { fg = "#ffaa00" })
+--
+-- -- Method definitions
+-- vim.api.nvim_set_hl(0, "@function.method", { fg = "#00ffaa" })
+--
+-- -- Method calls
+-- vim.api.nvim_set_hl(0, "@function.method.call", { fg = "#00ffaa" })
+--
+-- -- The "func" keyword itself
+-- vim.api.nvim_set_hl(0, "@keyword.function", { fg = "#ff6666" })
