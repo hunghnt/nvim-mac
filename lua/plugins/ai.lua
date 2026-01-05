@@ -14,7 +14,7 @@ return {
 					accept_line = false,
 					next = "<M-]>",
 					prev = "<M-[>",
-					dismiss = "<C-]>",
+					dismiss = "<C-Tab>",
 				},
 			},
 			-- copilot_model = "gpt-4o-copilot",
