@@ -10,25 +10,13 @@ return {
 		priority = 1000,
 		config = function()
 			require("kanagawa").setup({
-				compile = false, -- enable compiling the colorscheme
-				undercurl = true, -- enable undercurls
+				undercurl = true,
 				commentStyle = { italic = true },
-				functionStyle = {},
 				keywordStyle = { italic = true },
 				statementStyle = { bold = true },
-				typeStyle = {},
-				transparent = false, -- do not set background color
-				dimInactive = false, -- dim inactive window `:h hl-NormalNC`
-				terminalColors = true, -- define vim.g.terminal_color_{0,17}
-				colors = { -- add/modify theme and palette colors
-					palette = {},
-					theme = { wave = {}, lotus = {}, dragon = {}, all = {} },
-				},
-				theme = "wave", -- Load "wave" theme when 'background' option is not set
-				background = { -- map the value of 'background' option to a theme
-					dark = "wave", -- try "dragon" !
-					light = "lotus",
-				},
+				transparent = false,
+				theme = "wave",
+				background = { dark = "wave", light = "lotus" },
 			})
 		end,
 	},
@@ -37,32 +25,70 @@ return {
 		name = "rose-pine",
 	},
 	{
-		"zaldih/themery.nvim",
-		lazy = false,
-		config = function()
-			require("themery").setup({
-				themes = { "kanagawa", "catppuccin", "rose-pine", "rose-pine-dawn" },
-				livePreview = true,
-			})
-		end,
-	},
-	-- Lua
-
-	{
 		"olivercederborg/poimandres.nvim",
 		lazy = false,
 		priority = 1000,
 		config = function()
-			require("poimandres").setup({
-				-- leave this setup function empty for default config
-				-- or refer to the configuration section
-				-- for configuration options
-			})
+			require("poimandres").setup({})
 		end,
-
-		-- optionally set the colorscheme within lazy config
 		init = function()
 			vim.cmd("colorscheme poimandres")
+		end,
+	},
+	{
+		"zaldih/themery.nvim",
+		lazy = false,
+		config = function()
+			require("themery").setup({
+				themes = { "kanagawa", "catppuccin", "rose-pine", "poimandres" },
+				livePreview = true,
+				transparent = true,
+			})
+
+			-- Centralized logic for Black Background and Go Highlighting
+			local function apply_custom_highlights()
+				-- 1. Deep Black Background
+				local bg_groups = {
+					"Normal",
+					"NormalFloat",
+					"SignColumn",
+					"LineNr",
+					"FoldColumn",
+					"CursorLine",
+					"EndOfBuffer",
+				}
+				for _, group in ipairs(bg_groups) do
+					vim.api.nvim_set_hl(0, group, { bg = "#000000" })
+				end
+
+				-- 2. Telescope Styling
+				local telescope_groups = {
+					"TelescopeNormal",
+					"TelescopeBorder",
+					"TelescopePromptNormal",
+					"TelescopePromptBorder",
+					"TelescopeResultsNormal",
+					"TelescopeResultsBorder",
+					"TelescopePreviewNormal",
+					"TelescopePreviewBorder",
+				}
+				for _, group in ipairs(telescope_groups) do
+					vim.api.nvim_set_hl(0, group, { bg = "#000000" })
+				end
+
+				-- 3. Go-specific Syntax (Professional Green/Red Palette)
+				vim.api.nvim_set_hl(0, "@keyword.return.go", { fg = "#ff3333" })
+				vim.api.nvim_set_hl(0, "@function", { fg = "#00ff00" })
+				vim.api.nvim_set_hl(0, "@function.call", { fg = "#00ff00" })
+			end
+
+			-- Initial run
+			apply_custom_highlights()
+
+			-- Re-apply whenever you change themes via Themery or :colorscheme
+			vim.api.nvim_create_autocmd("ColorScheme", {
+				callback = apply_custom_highlights,
+			})
 		end,
 	},
 }
