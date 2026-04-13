@@ -38,5 +38,8 @@ require("lazy").setup({
 	require("plugins.ai"),
 	require("plugins.vim-visual-multi"),
 	require("plugins.wrapperd"),
+	require("plugins.smear_cursor"),
+	-- require("plugins.neoscroll"),
+	-- require("plugins.diffview"),
 	{ "akinsho/git-conflict.nvim", version = "*", config = true },
 })

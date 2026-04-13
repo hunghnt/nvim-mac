@@ -29,7 +29,9 @@ return {
 		lazy = false,
 		priority = 1000,
 		config = function()
-			require("poimandres").setup({})
+			require("poimandres").setup({
+				transparent_background = true,
+			})
 		end,
 		init = function()
 			vim.cmd("colorscheme poimandres")
@@ -58,10 +60,44 @@ return {
 					"EndOfBuffer",
 				}
 				for _, group in ipairs(bg_groups) do
-					vim.api.nvim_set_hl(0, group, { bg = "#000000" })
+					vim.api.nvim_set_hl(0, group, { bg = "NONE" })
 				end
 
-				-- 2. Telescope Styling
+				-- 2. Bufferline / Tab Bar Background
+				-- local tabline_groups = {
+				-- 	"TabLine",
+				-- 	"TabLineFill",
+				-- 	"TabLineSel",
+				-- 	"BufferLineFill",
+				-- 	"BufferLineBackground",
+				-- 	"BufferLineTab",
+				-- 	"BufferLineTabClose",
+				-- 	"BufferLineTabSelected",
+				-- 	"BufferLineTabSeparator",
+				-- 	"BufferLineTabSeparatorSelected",
+				-- 	"BufferLineSeparator",
+				-- 	"BufferLineSeparatorSelected",
+				-- 	"BufferLineSeparatorVisible",
+				-- 	"BufferLineCloseButton",
+				-- 	"BufferLineCloseButtonSelected",
+				-- 	"BufferLineCloseButtonVisible",
+				-- 	"BufferLineBufferSelected",
+				-- 	"BufferLineBufferVisible",
+				-- 	"BufferLineModified",
+				-- 	"BufferLineModifiedSelected",
+				-- 	"BufferLineModifiedVisible",
+				-- 	"BufferLineDuplicate",
+				-- 	"BufferLineDuplicateSelected",
+				-- 	"BufferLineDuplicateVisible",
+				-- 	"BufferLineIndicatorSelected",
+				-- 	"BufferLineIndicatorVisible",
+				-- 	"BufferLineOffsetSeparator",
+				-- }
+				-- for _, group in ipairs(tabline_groups) do
+				-- 	vim.api.nvim_set_hl(0, group, { bg = "NONE" })
+				-- end
+
+				-- 3. Telescope Styling
 				local telescope_groups = {
 					"TelescopeNormal",
 					"TelescopeBorder",
@@ -74,9 +110,11 @@ return {
 				}
 				for _, group in ipairs(telescope_groups) do
 					vim.api.nvim_set_hl(0, group, { bg = "#000000" })
+
+					-- vim.api.nvim_set_hl(0, group, { bg = "NONE" })
 				end
 
-				-- 3. Go-specific Syntax (Professional Green/Red Palette)
+				-- 4. Go-specific Syntax (Professional Green/Red Palette)
 				vim.api.nvim_set_hl(0, "@keyword.return.go", { fg = "#ff3333" })
 				vim.api.nvim_set_hl(0, "@function", { fg = "#00ff00" })
 				vim.api.nvim_set_hl(0, "@function.call", { fg = "#00ff00" })
