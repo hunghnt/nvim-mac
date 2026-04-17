@@ -18,10 +18,16 @@ return {
 							commands = {
 								ExpandMacro = {
 									function()
+										local clients = vim.lsp.get_clients({ bufnr = 0, name = "rust_analyzer" })
+										if #clients == 0 then
+											vim.notify("rust_analyzer is not attached to this buffer", vim.log.levels.WARN)
+											return
+										end
+										local params = vim.lsp.util.make_position_params(0, clients[1].offset_encoding)
 										vim.lsp.buf_request_all(
 											0,
 											"rust-analyzer/expandMacro",
-											vim.lsp.util.make_position_params(),
+											params,
 											function(result)
 												vim.cmd("set splitright")
 												vim.cmd("vsplit")
