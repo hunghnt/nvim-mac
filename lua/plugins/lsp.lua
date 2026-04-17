@@ -45,6 +45,7 @@ return {
 				function(server_name)
 					if server_name == "rust_analyzer" then
 						require("lspconfig")[server_name].setup({
+							on_attach = on_attach,
 							commands = {
 								ExpandMacro = {
 									function()
@@ -94,7 +95,7 @@ return {
 					elseif server_name == "sqls" then
 						require("lspconfig").sqls.setup({
 							on_attach = function(client, bufnr)
-								require("sqls").on_attach(client, bufnr)
+								on_attach(client, bufnr)
 								vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
 							end,
 							settings = {
@@ -109,7 +110,7 @@ return {
 							},
 						})
 					else
-						require("lspconfig")[server_name].setup({})
+						require("lspconfig")[server_name].setup({ on_attach = on_attach })
 					end
 				end,
 			},
