@@ -8,6 +8,36 @@ return {
 		{ "nanotee/sqls.nvim" },
 	},
 	config = function()
+		-- Shared on_attach: enables 0.12 features per-buffer based on server capabilities.
+		local function on_attach(client, bufnr)
+			-- Linked editing range (synchronized edit of matching symbols in scope).
+			if client.supports_method("textDocument/linkedEditingRange") then
+				vim.lsp.linked_editing_range.enable(true, { client_id = client.id, bufnr = bufnr })
+			end
+
+			-- Inlay hints: enable on attach if supported.
+			if client.supports_method("textDocument/inlayHint") then
+				vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+			end
+
+			-- Buffer-local toggle: inlay hints.
+			vim.keymap.set("n", "<leader>lh", function()
+				local enabled = vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr })
+				vim.lsp.inlay_hint.enable(not enabled, { bufnr = bufnr })
+			end, { buffer = bufnr, desc = "Toggle inlay hints" })
+
+			-- Buffer-local toggle: linked editing range.
+			vim.keymap.set("n", "<leader>lL", function()
+				local enabled = vim.b[bufnr].linked_editing_enabled
+				if enabled == nil then
+					enabled = client.supports_method("textDocument/linkedEditingRange")
+				end
+				enabled = not enabled
+				vim.lsp.linked_editing_range.enable(enabled, { client_id = client.id, bufnr = bufnr })
+				vim.b[bufnr].linked_editing_enabled = enabled
+			end, { buffer = bufnr, desc = "Toggle linked editing range" })
+		end
+
 		require("mason").setup({})
 		require("mason-lspconfig").setup({
 			ensure_installed = { "rust_analyzer", "clangd", "pyright", "sqls" },
@@ -15,13 +45,20 @@ return {
 				function(server_name)
 					if server_name == "rust_analyzer" then
 						require("lspconfig")[server_name].setup({
+							on_attach = on_attach,
 							commands = {
 								ExpandMacro = {
 									function()
+										local clients = vim.lsp.get_clients({ bufnr = 0, name = "rust_analyzer" })
+										if #clients == 0 then
+											vim.notify("rust_analyzer is not attached to this buffer", vim.log.levels.WARN)
+											return
+										end
+										local params = vim.lsp.util.make_position_params(0, clients[1].offset_encoding)
 										vim.lsp.buf_request_all(
 											0,
 											"rust-analyzer/expandMacro",
-											vim.lsp.util.make_position_params(),
+											params,
 											function(result)
 												vim.cmd("set splitright")
 												vim.cmd("vsplit")
@@ -58,7 +95,7 @@ return {
 					elseif server_name == "sqls" then
 						require("lspconfig").sqls.setup({
 							on_attach = function(client, bufnr)
-								require("sqls").on_attach(client, bufnr)
+								on_attach(client, bufnr)
 								vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
 							end,
 							settings = {
@@ -73,7 +110,7 @@ return {
 							},
 						})
 					else
-						require("lspconfig")[server_name].setup({})
+						require("lspconfig")[server_name].setup({ on_attach = on_attach })
 					end
 				end,
 			},
@@ -93,7 +130,12 @@ return {
 		vim.api.nvim_create_autocmd("BufWritePre", {
 			pattern = "*.go",
 			callback = function()
-				local params = vim.lsp.util.make_range_params()
+				local clients = vim.lsp.get_clients({ bufnr = 0, name = "gopls" })
+				if #clients == 0 then
+					return
+				end
+				local client = clients[1]
+				local params = vim.lsp.util.make_range_params(0, client.offset_encoding)
 				params.context = { only = { "source.organizeImports" } }
 				local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params)
 				for cid, res in pairs(result or {}) do

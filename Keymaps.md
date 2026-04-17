@@ -25,8 +25,12 @@ Leader key: `<Space>`
 ## Diagnostics (LSP + built-in)
 | Mode | Keys | Action |
 |------|------|--------|
-| n | `]d` | Go to next diagnostic |
-| n | `[d` | Go to previous diagnostic |
+| n | `]d` | Go to next diagnostic (any severity) |
+| n | `[d` | Go to previous diagnostic (any severity) |
+| n | `]e` | Go to next error (Neovim 0.12) |
+| n | `[e` | Go to previous error (Neovim 0.12) |
+| n | `]w` | Go to next warning (Neovim 0.12) |
+| n | `[w` | Go to previous warning (Neovim 0.12) |
 | n | `<leader>d` | Open floating diagnostic window |
 
 ## Telescope
@@ -53,6 +57,8 @@ Leader key: `<Space>`
 | n | `gd` | Go to definition |
 | n | `K` | Hover documentation |
 | n | `<C-k>` | Signature help |
+| n | `<leader>lh` | Toggle inlay hints (buffer-local, Neovim 0.12) |
+| n | `<leader>lL` | Toggle linked editing range (buffer-local, Neovim 0.12) |
 
 ## Debug (nvim-dap)
 | Mode | Keys | Action |
@@ -102,3 +108,5 @@ Leader key: `<Space>`
 - Some Telescope mappings inside its prompt (like `<C-k>`, `<C-j>`, `<C-l>`) are internal to Telescope insert mode and not listed here.
 - Rust macro expansion (`<leader>le`) only applies when using `rust_analyzer`.
 - Conditional breakpoint (`<leader>dB`) prompts for a condition.
+- `:lsp` (Neovim 0.12) — interactive LSP client manager. Run `:help :lsp` for subcommands (list/info/start/stop/restart).
+- Inlay hints toggle (`<leader>lh`) and linked-editing toggle (`<leader>lL`) are buffer-local — each buffer remembers its own state.
