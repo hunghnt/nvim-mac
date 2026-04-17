@@ -8,6 +8,36 @@ return {
 		{ "nanotee/sqls.nvim" },
 	},
 	config = function()
+		-- Shared on_attach: enables 0.12 features per-buffer based on server capabilities.
+		local function on_attach(client, bufnr)
+			-- Linked editing range (synchronized edit of matching symbols in scope).
+			if client.supports_method("textDocument/linkedEditingRange") then
+				vim.lsp.linked_editing_range.enable(true, { client_id = client.id, bufnr = bufnr })
+			end
+
+			-- Inlay hints: enable on attach if supported.
+			if client.supports_method("textDocument/inlayHint") then
+				vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+			end
+
+			-- Buffer-local toggle: inlay hints.
+			vim.keymap.set("n", "<leader>lh", function()
+				local enabled = vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr })
+				vim.lsp.inlay_hint.enable(not enabled, { bufnr = bufnr })
+			end, { buffer = bufnr, desc = "Toggle inlay hints" })
+
+			-- Buffer-local toggle: linked editing range.
+			vim.keymap.set("n", "<leader>lL", function()
+				local enabled = vim.b[bufnr].linked_editing_enabled
+				if enabled == nil then
+					enabled = client.supports_method("textDocument/linkedEditingRange")
+				end
+				enabled = not enabled
+				vim.lsp.linked_editing_range.enable(enabled, { client_id = client.id, bufnr = bufnr })
+				vim.b[bufnr].linked_editing_enabled = enabled
+			end, { buffer = bufnr, desc = "Toggle linked editing range" })
+		end
+
 		require("mason").setup({})
 		require("mason-lspconfig").setup({
 			ensure_installed = { "rust_analyzer", "clangd", "pyright", "sqls" },
