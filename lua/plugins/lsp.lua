@@ -99,7 +99,12 @@ return {
 		vim.api.nvim_create_autocmd("BufWritePre", {
 			pattern = "*.go",
 			callback = function()
-				local params = vim.lsp.util.make_range_params()
+				local clients = vim.lsp.get_clients({ bufnr = 0, name = "gopls" })
+				if #clients == 0 then
+					return
+				end
+				local client = clients[1]
+				local params = vim.lsp.util.make_range_params(0, client.offset_encoding)
 				params.context = { only = { "source.organizeImports" } }
 				local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params)
 				for cid, res in pairs(result or {}) do
