@@ -37,6 +37,6 @@ vim.keymap.set("n", "<leader>b", "<cmd> enew <CR>", opts) -- new buffer
 -- Toggle line wrapping
 vim.keymap.set("n", "<leader>lw", "<cmd>set wrap!<CR>", opts)
 
-vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
-vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
+vim.keymap.set("n", "]d", function() vim.diagnostic.jump({ count = 1, float = true }) end, opts)
+vim.keymap.set("n", "[d", function() vim.diagnostic.jump({ count = -1, float = true }) end, opts)
 vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts)
