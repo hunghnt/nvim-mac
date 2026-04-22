@@ -5,7 +5,6 @@ return {
 		{ "williamboman/mason-lspconfig.nvim" },
 		{ "neovim/nvim-lspconfig" },
 		{ "VonHeikemen/lsp-zero.nvim", branch = "v3.x" },
-		{ "nanotee/sqls.nvim" },
 	},
 	config = function()
 		-- Shared on_attach: enables 0.12 features per-buffer based on server capabilities.
@@ -40,7 +39,7 @@ return {
 
 		require("mason").setup({})
 		require("mason-lspconfig").setup({
-			ensure_installed = { "rust_analyzer", "clangd", "pyright", "sqls" },
+			ensure_installed = { "rust_analyzer", "clangd", "pyright", "gopls" },
 			handlers = {
 				function(server_name)
 					if server_name == "rust_analyzer" then
@@ -92,23 +91,6 @@ return {
 								},
 							},
 						})
-					elseif server_name == "sqls" then
-						require("lspconfig").sqls.setup({
-							on_attach = function(client, bufnr)
-								on_attach(client, bufnr)
-								vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
-							end,
-							settings = {
-								sqls = {
-									connections = {
-										{
-											driver = "postgresql", -- change to your driver: "mysql", "sqlite3"
-											dataSourceName = "host=127.0.0.1 port=5432 user=postgres password=secret dbname=mydb sslmode=disable",
-										},
-									},
-								},
-							},
-						})
 					else
 						require("lspconfig")[server_name].setup({ on_attach = on_attach })
 					end
@@ -150,12 +132,5 @@ return {
 			end,
 		})
 
-		-- Auto format SQL files on save
-		vim.api.nvim_create_autocmd("BufWritePre", {
-			pattern = "*.sql",
-			callback = function()
-				vim.lsp.buf.format({ async = false })
-			end,
-		})
 	end,
 }
