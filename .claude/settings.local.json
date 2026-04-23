@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git checkout *)",
+      "Bash(nvim *)",
+      "Bash(python3 *)",
+      "Read(//opt/homebrew/Cellar/neovim/0.12.1/share/nvim/runtime/lua/vim/**)",
+      "Bash(find / -path '*neovim/0.12.1/share/nvim/runtime/lua/vim/treesitter.lua')",
+      "Bash(tree-sitter --version)",
+      "Bash(brew info *)",
+      "Bash(brew outdated *)",
+      "Bash(luac -p /Users/hohung/.config/nvim/lua/plugins/treesitter.lua)",
+      "Bash(brew uses *)",
+      "Bash(brew list *)",
+      "Bash(awk 'NR==43' /Users/hohung/.config/nvim/lua/plugins/lsp.lua)",
+      "Bash(/opt/homebrew/bin/luac -p /Users/hohung/.config/nvim/lua/plugins/lsp.lua)"
+    ]
+  }
+}
