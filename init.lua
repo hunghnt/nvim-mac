@@ -1,6 +1,8 @@
 require("options")
 
-pcall(function() require("vim._core.ui2").enable() end)
+pcall(function()
+	require("vim._core.ui2").enable()
+end)
 
 -- Lazy set up
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -41,7 +43,17 @@ require("lazy").setup({
 	require("plugins.vim-visual-multi"),
 	require("plugins.wrapperd"),
 	require("plugins.smear_cursor"),
+	require("plugins.telekasten"),
+	require("plugins.diffview"),
+	require("plugins.git-conflict"),
+	require("plugins.surround"),
 	-- require("plugins.neoscroll"),
-	-- require("plugins.diffview"),
-	{ "akinsho/git-conflict.nvim", version = "*", config = true },
+})
+
+vim.filetype.add({ extension = { hurl = "hurl" } })
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = { "hurl", "sh", "bash", "zsh", "fish", "conf", "gitconfig" },
+	callback = function(ev)
+		vim.bo[ev.buf].commentstring = "# %s"
+	end,
 })

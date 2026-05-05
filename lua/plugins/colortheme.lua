@@ -38,18 +38,22 @@ return {
 		end,
 	},
 	{
+		"shaunsingh/nord.nvim",
+		lazy = false,
+		priority = 1000,
+	},
+	{
 		"zaldih/themery.nvim",
 		lazy = false,
 		config = function()
 			require("themery").setup({
-				themes = { "kanagawa", "catppuccin", "rose-pine", "poimandres" },
+				themes = { "nord", "kanagawa", "catppuccin", "rose-pine", "poimandres" },
 				livePreview = true,
 				transparent = true,
 			})
 
-			-- Centralized logic for Black Background and Go Highlighting
+			-- Transparent background overrides (Go syntax overrides disabled — using native palette)
 			local function apply_custom_highlights()
-				-- 1. Deep Black Background
 				local bg_groups = {
 					"Normal",
 					"NormalFloat",
@@ -63,67 +67,17 @@ return {
 					vim.api.nvim_set_hl(0, group, { bg = "NONE" })
 				end
 
-				-- 2. Bufferline / Tab Bar Background
-				-- local tabline_groups = {
-				-- 	"TabLine",
-				-- 	"TabLineFill",
-				-- 	"TabLineSel",
-				-- 	"BufferLineFill",
-				-- 	"BufferLineBackground",
-				-- 	"BufferLineTab",
-				-- 	"BufferLineTabClose",
-				-- 	"BufferLineTabSelected",
-				-- 	"BufferLineTabSeparator",
-				-- 	"BufferLineTabSeparatorSelected",
-				-- 	"BufferLineSeparator",
-				-- 	"BufferLineSeparatorSelected",
-				-- 	"BufferLineSeparatorVisible",
-				-- 	"BufferLineCloseButton",
-				-- 	"BufferLineCloseButtonSelected",
-				-- 	"BufferLineCloseButtonVisible",
-				-- 	"BufferLineBufferSelected",
-				-- 	"BufferLineBufferVisible",
-				-- 	"BufferLineModified",
-				-- 	"BufferLineModifiedSelected",
-				-- 	"BufferLineModifiedVisible",
-				-- 	"BufferLineDuplicate",
-				-- 	"BufferLineDuplicateSelected",
-				-- 	"BufferLineDuplicateVisible",
-				-- 	"BufferLineIndicatorSelected",
-				-- 	"BufferLineIndicatorVisible",
-				-- 	"BufferLineOffsetSeparator",
-				-- }
-				-- for _, group in ipairs(tabline_groups) do
-				-- 	vim.api.nvim_set_hl(0, group, { bg = "NONE" })
-				-- end
-
-				-- 3. Telescope Styling
-				local telescope_groups = {
-					"TelescopeNormal",
-					"TelescopeBorder",
-					"TelescopePromptNormal",
-					"TelescopePromptBorder",
-					"TelescopeResultsNormal",
-					"TelescopeResultsBorder",
-					"TelescopePreviewNormal",
-					"TelescopePreviewBorder",
-				}
-				for _, group in ipairs(telescope_groups) do
-					vim.api.nvim_set_hl(0, group, { bg = "#000000" })
-
-					-- vim.api.nvim_set_hl(0, group, { bg = "NONE" })
-				end
-
-				-- 4. Go-specific Syntax (Professional Green/Red Palette)
-				vim.api.nvim_set_hl(0, "@keyword.return.go", { fg = "#ff3333" })
-				vim.api.nvim_set_hl(0, "@function", { fg = "#00ff00" })
-				vim.api.nvim_set_hl(0, "@function.call", { fg = "#00ff00" })
+				-- Go-specific Syntax overrides disabled
+				-- vim.api.nvim_set_hl(0, "@keyword.return.go", { fg = "#d4a5a5" })
+				-- vim.api.nvim_set_hl(0, "@function", { fg = "#a5b8d4" })
+				-- vim.api.nvim_set_hl(0, "@function.call", { fg = "#a5b8d4" })
+				-- vim.api.nvim_set_hl(0, "@string", { fg = "#a8c4a8" })
+				-- vim.api.nvim_set_hl(0, "@keyword", { fg = "#bca5d4" })
+				-- vim.api.nvim_set_hl(0, "@variable", { fg = "#d4c8a5" })
 			end
 
-			-- Initial run
 			apply_custom_highlights()
 
-			-- Re-apply whenever you change themes via Themery or :colorscheme
 			vim.api.nvim_create_autocmd("ColorScheme", {
 				callback = apply_custom_highlights,
 			})

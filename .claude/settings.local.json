@@ -15,7 +15,9 @@
       "Bash(brew uses *)",
       "Bash(brew list *)",
       "Bash(awk 'NR==43' /Users/hohung/.config/nvim/lua/plugins/lsp.lua)",
-      "Bash(/opt/homebrew/bin/luac -p /Users/hohung/.config/nvim/lua/plugins/lsp.lua)"
+      "Bash(/opt/homebrew/bin/luac -p /Users/hohung/.config/nvim/lua/plugins/lsp.lua)",
+      "Bash(echo \"---exit:$?---\")",
+      "Bash(git -C /Users/hohung/.config/nvim status --short lua/plugins/surround.lua)"
     ]
   }
 }

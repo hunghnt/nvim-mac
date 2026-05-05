@@ -1,7 +1,15 @@
 return {
 	{
 		"numToStr/Comment.nvim",
-		opts = {},
+		opts = {
+			toggler = { line = "<leader>gcc", block = "<leader>gbc" },
+			opleader = { line = "<leader>gc", block = "<leader>gb" },
+			extra = {
+				above = "<leader>gcO",
+				below = "<leader>gco",
+				eol = "<leader>gcA",
+			},
+		},
 	},
 	{
 		"mbbill/undotree",
