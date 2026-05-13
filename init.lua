@@ -1,59 +1,79 @@
-require("options")
+vim.loader.enable()
 
-pcall(function()
-	require("vim._core.ui2").enable()
-end)
+vim.g.mapleader = " " -- Space as leader key
+vim.g.maplocalleader = " " -- Space as local leader key (optional)im.cmd("set expandtab")
 
--- Lazy set up
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not (vim.uv or vim.loop).fs_stat(lazypath) then
-	local lazyrepo = "https://github.com/folke/lazy.nvim.git"
-	local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
-	if vim.v.shell_error ~= 0 then
-		vim.api.nvim_echo({
-			{ "Failed to clone lazy.nvim:\n", "ErrorMsg" },
-			{ out, "WarningMsg" },
-			{ "\nPress any key to exit..." },
-		}, true, {})
-		vim.fn.getchar()
-		os.exit(1)
-	end
-end
+vim.wo.number = true
 
-vim.opt.rtp:prepend(lazypath)
--- Setup
-require("lazy").setup({
-	require("plugins.misc"),
-	require("plugins.colortheme"),
-	require("plugins.gitsigns"),
-	require("plugins.treesitter"),
-	require("plugins.lsp"),
-	require("plugins.nonels"),
-	require("plugins.cmp"),
-	require("plugins.telescope"),
-	require("plugins.oil"),
-	require("plugins.bufferline"),
-	require("plugins.lualine"),
-	require("plugins.lazygit"),
-	require("plugins.indent-blankline"),
-	require("plugins.debug"),
-	require("plugins.lspsaga"),
-	require("plugins.gitblame"),
-	require("plugins.ai"),
-	require("plugins.vim-visual-multi"),
-	require("plugins.wrapperd"),
-	require("plugins.smear_cursor"),
-	require("plugins.telekasten"),
-	require("plugins.diffview"),
-	require("plugins.git-conflict"),
-	require("plugins.surround"),
-	-- require("plugins.neoscroll"),
-})
+vim.o.relativenumber = true
+vim.o.shiftwidth = 4 -- The number of spaces inserted for each indentation (default: 8)
+vim.o.tabstop = 4
+vim.o.softtabstop = 4
+vim.o.breakindent = true
 
-vim.filetype.add({ extension = { hurl = "hurl" } })
-vim.api.nvim_create_autocmd("FileType", {
-	pattern = { "hurl", "sh", "bash", "zsh", "fish", "conf", "gitconfig" },
+vim.opt.wrap = false
+vim.opt.termguicolors = true
+vim.opt.fillchars = { eob = " " }
+vim.opt.swapfile = false
+vim.opt.backup = false
+vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
+vim.opt.undofile = true
+vim.opt.hlsearch = false
+vim.opt.incsearch = true
+vim.opt.laststatus = 3
+
+-- general keymaps
+local opts = { noremap = true, silent = true }
+
+vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]], opts)
+
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", opts)
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", opts)
+
+-- Buffers
+vim.keymap.set("n", "<tab>", ":bnext<CR>", opts)
+vim.keymap.set("n", "<s-tab>", ":bprevious<CR>", opts)
+vim.keymap.set("n", "<leader>x", ":Bdelete!<CR>", opts) -- close buffer
+vim.keymap.set("n", "<leader>b", "<cmd> enew <CR>", opts) -- new buffer
+
+-- Toggle line wrapping
+vim.keymap.set("n", "<leader>lw", "<cmd>set wrap!<CR>", opts)
+
+vim.keymap.set("n", "]d", function() vim.diagnostic.jump({ count = 1, float = true }) end, opts)
+vim.keymap.set("n", "[d", function() vim.diagnostic.jump({ count = -1, float = true }) end, opts)
+vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts)
+
+-- Severity-filtered diagnostic jumps (Neovim 0.12)
+vim.keymap.set("n", "]e", function()
+	vim.diagnostic.jump({ count = 1, severity = vim.diagnostic.severity.ERROR, float = true })
+end, opts)
+vim.keymap.set("n", "[e", function()
+	vim.diagnostic.jump({ count = -1, severity = vim.diagnostic.severity.ERROR, float = true })
+end, opts)
+vim.keymap.set("n", "]w", function()
+	vim.diagnostic.jump({ count = 1, severity = vim.diagnostic.severity.WARN, float = true })
+end, opts)
+vim.keymap.set("n", "[w", function()
+	vim.diagnostic.jump({ count = -1, severity = vim.diagnostic.severity.WARN, float = true })
+end, opts)
+
+vim.api.nvim_create_autocmd("PackChanged", {
 	callback = function(ev)
-		vim.bo[ev.buf].commentstring = "# %s"
+		local name = ev.data.spec.name
+		local kind = ev.data.kind
+
+		if name == "nvim-treesitter" and (kind == "install" or kind == "update") then
+			if not ev.data.active then
+				vim.cmd.packadd("nvim-treesitter")
+			end
+			vim.cmd("TSUpdate")
+		end
+
+		if name == "LuaSnip" and (kind == "install" or kind == "update") then
+			if vim.fn.has("win32") == 0 and vim.fn.executable("make") == 1 then
+				local path = ev.data.spec.path or (vim.fn.stdpath("data") .. "/site/pack/core/opt/LuaSnip")
+				vim.system({ "make", "install_jsregexp" }, { cwd = path }):wait()
+			end
+		end
 	end,
 })
